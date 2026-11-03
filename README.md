@@ -1,18 +1,9 @@
 <div align="center">
-<<<<<<< HEAD
-  <img src="./frontend/public/logo-full.png" alt="Sahyog Logo" width="600" />
-  <br/>
-  <h3>Logistics for Social Good.</h3>
-  <p>Bridging the gap between urban surplus and critical need through AI-driven logistics.</p>
-  
-=======
-  <!-- Note: The logo will appear once you push the code with the public folder -->
   <img src="./frontend/public/logo-full.png" alt="Sahyog Logo" width="400" />
   <br/>
   <h1>Logistics for Social Good.</h1>
   <p><i>Bridging the gap between urban surplus and critical need through AI-driven logistics.</i></p>
 
->>>>>>> 83b8fe3804ae497fda367365fb5f2ad27fe46018
   [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
   [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
   [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
@@ -61,9 +52,5 @@ Instead of blindly dropping off old clothes, users browse a "Needs Board" and fu
 
 ### 1. Clone the repository
 ```bash
-<<<<<<< HEAD
-git clone https://github.com/YOUR-USERNAME/Sahyog.git
-=======
-git clone https://github.com/your-new-username/Sahyog.git
->>>>>>> 83b8fe3804ae497fda367365fb5f2ad27fe46018
+git clone https://github.com/sahyoglogistics01-ui/Sahyog.git
 cd Sahyog
