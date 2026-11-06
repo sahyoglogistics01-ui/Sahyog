@@ -17,8 +17,8 @@ export default function DriverDashboard() {
           <h1 className="text-4xl font-bold text-white tracking-tight">Dispatch Center</h1>
           <p className="text-sm text-slate-400 mt-2">Accept routes, deliver essentials, earn rewards.</p>
         </div>
-        <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-xl backdrop-blur-md">
-          <Gift className="w-5 h-5 text-emerald-400" />
+        <div className="flex items-center gap-3 bg-rose-600/10 border border-rose-600/20 px-4 py-2 rounded-xl backdrop-blur-md">
+          <Gift className="w-5 h-5 text-rose-500" />
           <div>
             <p className="text-xs text-slate-400">Barter Wallet</p>
             <p className="text-sm font-bold text-white">0 / 5 Deliveries</p>
@@ -62,15 +62,15 @@ export default function DriverDashboard() {
           </div>
 
           {/* Barter Rewards Tracker */}
-          <div className="bg-gradient-to-br from-emerald-900/20 to-slate-900/50 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-6">
+          <div className="bg-gradient-to-br from-rose-950/20 to-slate-900/50 backdrop-blur-md border border-rose-600/20 rounded-2xl p-6">
             <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-              <Coffee className="w-5 h-5 text-emerald-400" /> Barter Rewards
+              <Coffee className="w-5 h-5 text-rose-500" /> Barter Rewards
             </h3>
             <p className="text-xs text-slate-400 mb-4">Complete 5 deliveries to unlock a free meal at partner restaurants.</p>
-            <div className="h-2 w-full bg-black/50 rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 w-[0%]"></div>
+            <div className="h-2 w-full bg-black/50 rounded-lg overflow-hidden">
+              <div className="h-full bg-rose-600 w-[0%]"></div>
             </div>
-            <div className="flex justify-between text-xs text-emerald-400 font-medium mt-2">
+            <div className="flex justify-between text-xs text-rose-500 font-medium mt-2">
               <span>0 Completed</span>
               <span>Goal: 5</span>
             </div>

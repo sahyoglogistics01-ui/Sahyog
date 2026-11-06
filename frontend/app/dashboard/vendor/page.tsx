@@ -16,7 +16,7 @@ export default function VendorDashboard() {
           <h1 className="text-4xl font-bold text-white tracking-tight">Inventory Manager</h1>
           <p className="text-sm text-slate-400 mt-2">Manage stock, track sales, and donate surplus.</p>
         </div>
-        <button className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-full text-sm font-bold transition shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+        <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-500 text-slate-950 px-5 py-2.5 rounded-lg text-sm font-bold transition shadow-[0_0_15px_rgba(16,185,129,0.3)]">
           <Package className="w-4 h-4" /> Add New Item
         </button>
       </div>
@@ -25,14 +25,14 @@ export default function VendorDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-6">
           <div className="flex items-center gap-3 mb-2">
-            <TrendingUp className="w-5 h-5 text-emerald-400" />
+            <TrendingUp className="w-5 h-5 text-rose-500" />
             <h3 className="text-sm font-medium text-slate-400">Total Sales Today</h3>
           </div>
           <p className="text-3xl font-bold text-white">₹ 0</p>
         </div>
         <div className="bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-6">
           <div className="flex items-center gap-3 mb-2">
-            <Package className="w-5 h-5 text-blue-400" />
+            <Package className="w-5 h-5 text-amber-300" />
             <h3 className="text-sm font-medium text-slate-400">Items in Stock</h3>
           </div>
           <p className="text-3xl font-bold text-white">0</p>

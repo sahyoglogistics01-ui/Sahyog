@@ -18,7 +18,7 @@ export default function Preloader() {
           scale: [1, 1.2, 0.9, 1]
         }}
         transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-500/20 blur-[120px] rounded-full pointer-events-none"
+        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-rose-600/20 blur-[120px] rounded-lg pointer-events-none"
       />
       <motion.div 
         animate={{ 
@@ -27,7 +27,7 @@ export default function Preloader() {
           scale: [1, 0.9, 1.1, 1]
         }}
         transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
-        className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none"
+        className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-amber-500/20 blur-[120px] rounded-lg pointer-events-none"
       />
       <motion.div 
         animate={{ 
@@ -35,7 +35,7 @@ export default function Preloader() {
           y: [0, -40, 60, 0],
         }}
         transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600/10 blur-[100px] rounded-full pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600/10 blur-[100px] rounded-lg pointer-events-none"
       />
 
       {/* Logo Animation */}
@@ -57,12 +57,12 @@ export default function Preloader() {
       
       {/* Loading Bar */}
       <div className="relative z-10 flex flex-col items-center gap-4">
-        <div className="w-80 h-1.5 bg-white/10 rounded-full overflow-hidden">
+        <div className="w-80 h-1.5 bg-white/10 rounded-lg overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ duration: 2.2, ease: "easeInOut" }}
-            className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.8)]"
+            className="h-full bg-rose-600 shadow-[0_0_15px_rgba(16,185,129,0.8)]"
           />
         </div>
         

@@ -16,7 +16,7 @@ export default function NGODashboard() {
           <h1 className="text-4xl font-bold text-white tracking-tight">NGO Command Center</h1>
           <p className="text-sm text-slate-400 mt-2">Manage your inventory and incoming donations.</p>
         </div>
-        <button className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-full text-sm font-bold transition shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+        <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-500 text-slate-950 px-5 py-2.5 rounded-lg text-sm font-bold transition shadow-[0_0_15px_rgba(16,185,129,0.3)]">
           <PlusCircle className="w-4 h-4" /> Post a New Need
         </button>
       </div>
@@ -25,8 +25,8 @@ export default function NGODashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-6">
-            <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-              <Utensils className="w-5 h-5 text-emerald-400" />
+            <div className="p-2.5 rounded-lg bg-rose-600/10 border border-rose-600/20">
+              <Utensils className="w-5 h-5 text-rose-500" />
             </div>
             <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider bg-white/5 px-2 py-1 rounded">Pantry AI</span>
           </div>
@@ -38,8 +38,8 @@ export default function NGODashboard() {
                 <span className="text-slate-300">Grains & Rice</span>
                 <span className="text-slate-500 font-medium">0%</span>
               </div>
-              <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 w-[0%]"></div>
+              <div className="h-2 w-full bg-white/10 rounded-lg overflow-hidden">
+                <div className="h-full bg-rose-600 w-[0%]"></div>
               </div>
             </div>
             <div>
@@ -47,7 +47,7 @@ export default function NGODashboard() {
                 <span className="text-slate-300">Perishables</span>
                 <span className="text-slate-500 font-medium">0%</span>
               </div>
-              <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+              <div className="h-2 w-full bg-white/10 rounded-lg overflow-hidden">
                 <div className="h-full bg-yellow-500 w-[0%]"></div>
               </div>
             </div>
@@ -60,8 +60,8 @@ export default function NGODashboard() {
 
         <div className="bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 relative overflow-hidden">
           <div className="flex justify-between items-start mb-6">
-            <div className="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
-              <Shirt className="w-5 h-5 text-blue-400" />
+            <div className="p-2.5 rounded-lg bg-amber-400/10 border border-amber-400/20">
+              <Shirt className="w-5 h-5 text-amber-300" />
             </div>
             <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider bg-white/5 px-2 py-1 rounded">Pantry AI</span>
           </div>
@@ -73,8 +73,8 @@ export default function NGODashboard() {
                 <span className="text-slate-300">Winter Wear</span>
                 <span className="text-slate-500 font-medium">0%</span>
               </div>
-              <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-500 w-[0%]"></div>
+              <div className="h-2 w-full bg-white/10 rounded-lg overflow-hidden">
+                <div className="h-full bg-amber-400 w-[0%]"></div>
               </div>
             </div>
             <div>
@@ -82,7 +82,7 @@ export default function NGODashboard() {
                 <span className="text-slate-300">Daily Wear</span>
                 <span className="text-slate-500 font-medium">0%</span>
               </div>
-              <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+              <div className="h-2 w-full bg-white/10 rounded-lg overflow-hidden">
                 <div className="h-full bg-red-500 w-[0%]"></div>
               </div>
             </div>
@@ -96,8 +96,8 @@ export default function NGODashboard() {
         <div className="space-y-3">
           {incoming.length === 0 ? (
             <div className="text-center py-16 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl">
-              <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Check className="w-8 h-8 text-emerald-400" />
+              <div className="w-16 h-16 bg-rose-600/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-rose-500" />
               </div>
               <h3 className="text-xl font-bold text-white mb-2">You're all caught up!</h3>
               <p className="text-slate-400 max-w-md mx-auto">There are no pending donations right now. Post a new need to alert donors in your area.</p>

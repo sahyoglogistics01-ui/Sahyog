@@ -111,14 +111,14 @@ export default function ProfileSetup() {
   if (isCheckingAuth) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-rose-600 border-t-transparent rounded-lg animate-spin"></div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 relative overflow-hidden">
-      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-rose-600/10 blur-[120px] rounded-lg pointer-events-none" />
       
       <div className="w-full max-w-2xl bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-3xl p-8 relative z-10 shadow-2xl">
         
@@ -126,10 +126,10 @@ export default function ProfileSetup() {
         <div className="flex items-center justify-between mb-8">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center flex-1 last:flex-none">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${step >= i ? "bg-emerald-500 text-slate-950" : "bg-slate-800 text-slate-400"}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm transition-colors ${step >= i ? "bg-rose-600 text-slate-950" : "bg-slate-800 text-slate-400"}`}>
                 {step > i ? <CheckCircle2 className="w-5 h-5" /> : i}
               </div>
-              {i !== 3 && <div className={`flex-1 h-1 mx-2 rounded-full ${step > i ? "bg-emerald-500" : "bg-slate-800"}`} />}
+              {i !== 3 && <div className={`flex-1 h-1 mx-2 rounded-lg ${step > i ? "bg-rose-600" : "bg-slate-800"}`} />}
             </div>
           ))}
         </div>
@@ -139,10 +139,10 @@ export default function ProfileSetup() {
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
               <h2 className="text-2xl font-bold text-white mb-6">Tell us about yourself</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none w-full" />
-                <input type="tel" placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none w-full" />
-                <input type="text" placeholder="City (e.g. Bengaluru)" value={city} onChange={e => setCity(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none w-full" />
-                <input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none w-full" />
+                <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-rose-600 outline-none w-full" />
+                <input type="tel" placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-rose-600 outline-none w-full" />
+                <input type="text" placeholder="City (e.g. Bengaluru)" value={city} onChange={e => setCity(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-rose-600 outline-none w-full" />
+                <input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-rose-600 outline-none w-full" />
                 <div className="md:col-span-2 flex items-center gap-4 bg-slate-800/30 p-4 rounded-xl border border-white/5">
                   <div className="flex-1">
                     <p className="text-sm text-white font-medium mb-1">Profile Picture</p>
@@ -153,9 +153,9 @@ export default function ProfileSetup() {
                     <input type="file" accept="image/*" onChange={e => setAvatarFile(e.target.files?.[0] || null)} className="hidden" />
                   </label>
                 </div>
-                {avatarFile && <p className="md:col-span-2 text-xs text-emerald-400">{avatarFile.name} selected</p>}
+                {avatarFile && <p className="md:col-span-2 text-xs text-rose-500">{avatarFile.name} selected</p>}
               </div>
-              <button onClick={() => setStep(2)} disabled={!username || !phone || !city || !age} className="mt-8 w-full bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl hover:bg-emerald-400 transition disabled:opacity-50 flex justify-center items-center gap-2">Next Step <ArrowRight className="w-4 h-4" /></button>
+              <button onClick={() => setStep(2)} disabled={!username || !phone || !city || !age} className="mt-8 w-full bg-rose-600 text-slate-950 font-bold py-3 rounded-xl hover:bg-rose-500 transition disabled:opacity-50 flex justify-center items-center gap-2">Next Step <ArrowRight className="w-4 h-4" /></button>
             </motion.div>
           )}
 
@@ -169,8 +169,8 @@ export default function ProfileSetup() {
                   { id: "driver", icon: Truck, title: "Driver", desc: "I want to deliver and earn rewards." },
                   { id: "vendor", icon: Store, title: "Vendor / Store", desc: "I want to sell or donate surplus stock." }
                 ].map((r) => (
-                  <div key={r.id} onClick={() => setRole(r.id as any)} className={`p-4 rounded-xl border cursor-pointer transition-all ${role === r.id ? "border-emerald-500 bg-emerald-500/10" : "border-white/10 bg-slate-800/30 hover:border-white/30"}`}>
-                    <r.icon className={`w-8 h-8 mb-3 ${role === r.id ? "text-emerald-400" : "text-slate-400"}`} />
+                  <div key={r.id} onClick={() => setRole(r.id as any)} className={`p-4 rounded-xl border cursor-pointer transition-all ${role === r.id ? "border-rose-600 bg-rose-600/10" : "border-white/10 bg-slate-800/30 hover:border-white/30"}`}>
+                    <r.icon className={`w-8 h-8 mb-3 ${role === r.id ? "text-rose-500" : "text-slate-400"}`} />
                     <h3 className="text-white font-semibold">{r.title}</h3>
                     <p className="text-xs text-slate-400 mt-1">{r.desc}</p>
                   </div>
@@ -178,7 +178,7 @@ export default function ProfileSetup() {
               </div>
               <div className="flex gap-4 mt-8">
                 <button onClick={() => setStep(1)} className="w-1/3 bg-white/5 hover:bg-white/10 text-white font-medium py-3 rounded-xl transition flex justify-center items-center gap-2"><ArrowLeft className="w-4 h-4" /> Back</button>
-                <button onClick={() => setStep(3)} disabled={!role} className="w-2/3 bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl hover:bg-emerald-400 transition disabled:opacity-50 flex justify-center items-center gap-2">Next Step <ArrowRight className="w-4 h-4" /></button>
+                <button onClick={() => setStep(3)} disabled={!role} className="w-2/3 bg-rose-600 text-slate-950 font-bold py-3 rounded-xl hover:bg-rose-500 transition disabled:opacity-50 flex justify-center items-center gap-2">Next Step <ArrowRight className="w-4 h-4" /></button>
               </div>
             </motion.div>
           )}
@@ -190,27 +190,27 @@ export default function ProfileSetup() {
               
               {role === "ngo" && (
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                  <input type="text" placeholder="Organization Name" value={orgName} onChange={e => setOrgName(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none w-full" />
-                  <input type="number" placeholder="Number of Members" value={memberCount} onChange={e => setMemberCount(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none w-full" />
+                  <input type="text" placeholder="Organization Name" value={orgName} onChange={e => setOrgName(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-rose-600 outline-none w-full" />
+                  <input type="number" placeholder="Number of Members" value={memberCount} onChange={e => setMemberCount(e.target.value)} className="bg-slate-800/50 border border-white/10 rounded-xl p-3 text-white focus:border-rose-600 outline-none w-full" />
                 </div>
               )}
 
               <div className="bg-slate-800/30 border border-white/5 p-6 rounded-xl flex flex-col items-center justify-center text-center border-dashed">
-                <Upload className="w-10 h-10 text-emerald-400 mb-3" />
+                <Upload className="w-10 h-10 text-rose-500 mb-3" />
                 <h3 className="text-white font-medium mb-1">
                   {role === "ngo" ? "Upload 12A/80G Certificate" : role === "driver" ? "Upload Driving License" : "Upload Govt ID (Aadhaar/PAN)"}
                 </h3>
                 <p className="text-xs text-slate-400 mb-4">PDF, JPG, or PNG formats</p>
-                <label className="cursor-pointer bg-emerald-500 text-slate-950 px-6 py-2 rounded-lg text-sm font-bold hover:bg-emerald-400 transition">
+                <label className="cursor-pointer bg-rose-600 text-slate-950 px-6 py-2 rounded-lg text-sm font-bold hover:bg-rose-500 transition">
                   Select File
                   <input type="file" accept=".pdf,image/*" onChange={e => setKycFile(e.target.files?.[0] || null)} className="hidden" />
                 </label>
-                {kycFile && <p className="text-xs text-emerald-400 mt-3">{kycFile.name} selected</p>}
+                {kycFile && <p className="text-xs text-rose-500 mt-3">{kycFile.name} selected</p>}
               </div>
 
               <div className="flex gap-4 mt-8">
                 <button onClick={() => setStep(2)} className="w-1/3 bg-white/5 hover:bg-white/10 text-white font-medium py-3 rounded-xl transition flex justify-center items-center gap-2"><ArrowLeft className="w-4 h-4" /> Back</button>
-                <button onClick={handleFinish} disabled={!kycFile || isLoading} className="w-2/3 bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl hover:bg-emerald-400 transition disabled:opacity-50 flex justify-center items-center gap-2">
+                <button onClick={handleFinish} disabled={!kycFile || isLoading} className="w-2/3 bg-rose-600 text-slate-950 font-bold py-3 rounded-xl hover:bg-rose-500 transition disabled:opacity-50 flex justify-center items-center gap-2">
                   {isLoading ? "Saving..." : "Complete Setup"} <CheckCircle2 className="w-4 h-4" />
                 </button>
               </div>
@@ -221,3 +221,6 @@ export default function ProfileSetup() {
     </div>
   );
 }
+<button className="mt-12 text-sm text-rose-500 hover:text-rose-400 hover:underline transition-colors">
+  Request Account Deletion
+</button>

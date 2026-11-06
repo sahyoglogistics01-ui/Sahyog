@@ -1,121 +1,257 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, ArrowRight, ChevronLeft, AlertCircle } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
+import { User, Building2, Truck, Store, Upload, ArrowRight, ArrowLeft, CheckCircle2, Image as ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabaseClient";
 
-export default function LoginPage() {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [step, setStep] = useState<"email" | "otp">("email");
-  const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
+export default function ProfileSetup() {
+  const [step, setStep] = useState(1);
+  const [user, setUser] = useState<any>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   
-  const supabase = createClient();
   const router = useRouter();
+  const supabase = createClient();
 
-  const handleGoogleLogin = async () => {
+  // Basic Info
+  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [age, setAge] = useState("");
+  
+  // Role
+  const [role, setRole] = useState<"donor" | "ngo" | "driver" | "vendor" | "">("");
+  
+  // NGO Specific
+  const [orgName, setOrgName] = useState("");
+  const [memberCount, setMemberCount] = useState("");
+  
+  // Profile Picture & KYC Files
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null); // Stores the Google PFP or uploaded PFP
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [kycFile, setKycFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        router.push("/login");
+        return;
+      }
+      
+      // If they have already completed the profile setup, send them straight to the dashboard
+      if (session.user.user_metadata?.profile_complete) {
+        router.push("/dashboard");
+        return;
+      }
+
+      setUser(session.user);
+
+      // 🚀 NEW: Grab the Google Profile Picture automatically!
+      const googleAvatar = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture;
+      if (googleAvatar) {
+        setAvatarUrl(googleAvatar);
+      }
+
+      // Try to pre-fill name from Google if available
+      const googleName = session.user.user_metadata?.full_name || session.user.user_metadata?.name;
+      if (googleName) {
+        setUsername(googleName);
+      }
+
+      setIsCheckingAuth(false);
+    };
+    checkUser();
+  }, [router, supabase]);
+
+  const handleFinish = async () => {
     setIsLoading(true);
-    setError(null);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-    if (error) { setError(error.message); setIsLoading(false); }
+    let finalAvatarUrl = avatarUrl || ""; // Start with the Google PFP
+    let kycUrl = "";
+
+    try {
+      // 1. If the user uploaded a NEW avatar, upload it to Supabase Storage
+      if (avatarFile) {
+        const fileExt = avatarFile.name.split('.').pop();
+        const fileName = `${user.id}-avatar-${Date.now()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage.from('sahyog-assets').upload(fileName, avatarFile, { upsert: true });
+        
+        if (!uploadError) {
+          const { data } = supabase.storage.from('sahyog-assets').getPublicUrl(fileName);
+          finalAvatarUrl = data.publicUrl;
+        }
+      }
+
+      // 2. Upload KYC Document
+      if (kycFile) {
+        const fileExt = kycFile.name.split('.').pop();
+        const fileName = `${user.id}-kyc-${Date.now()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage.from('sahyog-assets').upload(fileName, kycFile, { upsert: true });
+        
+        if (!uploadError) {
+          const { data } = supabase.storage.from('sahyog-assets').getPublicUrl(fileName);
+          kycUrl = data.publicUrl;
+        }
+      }
+
+      // 3. Save everything to Supabase User Metadata
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          username, 
+          phone, 
+          city, 
+          age: parseInt(age), 
+          role, 
+          org_name: orgName, 
+          member_count: parseInt(memberCount) || 0, 
+          avatar_url: finalAvatarUrl, // This saves either Google PFP or new upload
+          govt_id_url: kycUrl, 
+          profile_complete: true
+        }
+      });
+
+      if (error) throw error;
+      
+      router.push("/dashboard");
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+      setIsLoading(false);
+    }
   };
 
-  const handleSendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    const { error } = await supabase.auth.signInWithOtp({ email });
-    setIsLoading(false);
-    if (error) setError(error.message);
-    else setStep("otp");
-  };
-
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    const { data, error } = await supabase.auth.verifyOtp({ email, token: otp, type: "email" });
-    setIsLoading(false);
-    if (error) setError(error.message);
-    else if (data.session) router.push("/profile");
-  };
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-rose-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden">
-      {/* Live Background Orbs */}
-      <motion.div animate={{ x: [0, 80, -40, 0], y: [0, -60, 40, 0], scale: [1, 1.2, 0.9, 1] }} transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }} className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-500/20 blur-[120px] rounded-full pointer-events-none" />
-      <motion.div animate={{ x: [0, -60, 50, 0], y: [0, 80, -50, 0], scale: [1, 0.9, 1.1, 1] }} transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }} className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
-
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 w-full max-w-md p-8 bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-3xl shadow-2xl">
-        <div className="flex justify-center mb-6">
-          <Image src="/logo-full.png" alt="Sahyog" width={140} height={40} className="object-contain" />
-        </div>
-
-        <h1 className="text-2xl font-bold text-white text-center mb-2">
-          {isSignUp ? "Create an account" : "Welcome back"}
-        </h1>
-        <p className="text-sm text-slate-400 text-center mb-8">
-          {isSignUp ? "Join Sahyog to start making an impact" : "Sign in to continue your journey"}
-        </p>
-
-        {error && (
-          <div className="mb-6 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-red-400 text-sm">
-            <AlertCircle className="w-4 h-4 shrink-0" /> <p>{error}</p>
-          </div>
-        )}
-
-        <button onClick={handleGoogleLogin} disabled={isLoading} className="w-full flex items-center justify-center gap-3 bg-white text-slate-900 font-semibold py-3 rounded-xl hover:bg-slate-200 transition-colors mb-6 disabled:opacity-70">
-          <svg className="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" /><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
-          Continue with Google
-        </button>
-
-        <div className="relative flex items-center justify-center mb-6">
-          <div className="border-t border-white/10 w-full"></div>
-          <span className="bg-slate-900/60 px-3 text-xs text-slate-500 absolute">OR CONTINUE WITH EMAIL</span>
+    <div className="min-h-screen bg-[#09090b] flex items-center justify-center p-6 relative overflow-hidden">
+      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-rose-600/10 blur-[120px] rounded-full pointer-events-none" />
+      
+      <div className="w-full max-w-2xl bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-3xl p-8 relative z-10 shadow-2xl">
+        
+        {/* Progress Bar */}
+        <div className="flex items-center justify-between mb-8">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center flex-1 last:flex-none">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${step >= i ? "bg-rose-600 text-white" : "bg-slate-800 text-slate-400"}`}>
+                {step > i ? <CheckCircle2 className="w-5 h-5" /> : i}
+              </div>
+              {i !== 3 && <div className={`flex-1 h-1 mx-2 rounded-full ${step > i ? "bg-rose-600" : "bg-slate-800"}`} />}
+            </div>
+          ))}
         </div>
 
         <AnimatePresence mode="wait">
-          {step === "email" ? (
-            <motion.form key="email" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} onSubmit={handleSendOtp} className="space-y-4">
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required className="w-full bg-slate-800/50 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 transition-colors" />
+          {/* STEP 1: BASIC INFO */}
+          {step === 1 && (
+            <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <h2 className="text-2xl font-bold text-white mb-6">Tell us about yourself</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="bg-slate-900/80 border border-white/10 rounded-xl p-3 text-white focus:border-rose-500 outline-none w-full" />
+                <input type="tel" placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} className="bg-slate-900/80 border border-white/10 rounded-xl p-3 text-white focus:border-rose-500 outline-none w-full" />
+                <input type="text" placeholder="City (e.g. Bengaluru)" value={city} onChange={e => setCity(e.target.value)} className="bg-slate-900/80 border border-white/10 rounded-xl p-3 text-white focus:border-rose-500 outline-none w-full" />
+                <input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="bg-slate-900/80 border border-white/10 rounded-xl p-3 text-white focus:border-rose-500 outline-none w-full" />
+                
+                {/* Profile Picture Upload (With Google Auto-fill) */}
+                <div className="md:col-span-2 flex items-center gap-4 bg-slate-900/40 p-4 rounded-xl border border-white/5">
+                  <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-800 border-2 border-rose-500/30 shrink-0 flex items-center justify-center">
+                    {avatarFile ? (
+                      <img src={URL.createObjectURL(avatarFile)} alt="Preview" className="w-full h-full object-cover" />
+                    ) : avatarUrl ? (
+                      <img src={avatarUrl} alt="Google PFP" className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-6 h-6 text-slate-500" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm text-white font-medium mb-1">Profile Picture</p>
+                    <p className="text-xs text-slate-400">
+                      {avatarUrl ? "We imported this from Google. You can upload a new one." : "Upload a clear photo of yourself."}
+                    </p>
+                  </div>
+                  <label className="cursor-pointer bg-white/5 border border-white/10 hover:bg-white/10 px-4 py-2 rounded-lg text-sm text-white flex items-center gap-2 transition-colors">
+                    <Upload className="w-4 h-4" /> Change
+                    <input type="file" accept="image/*" onChange={e => setAvatarFile(e.target.files?.[0] || null)} className="hidden" />
+                  </label>
+                </div>
               </div>
-              <button type="submit" disabled={isLoading} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] flex items-center justify-center gap-2 disabled:opacity-70">
-                {isLoading ? "Sending..." : "Continue"} <ArrowRight className="w-4 h-4" />
+
+              <button onClick={() => setStep(2)} disabled={!username || !phone || !city || !age} className="mt-8 w-full bg-rose-600 text-white font-bold py-3 rounded-xl hover:bg-rose-500 transition disabled:opacity-50 flex justify-center items-center gap-2">
+                Next Step <ArrowRight className="w-4 h-4" />
               </button>
-            </motion.form>
-          ) : (
-            <motion.form key="otp" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} onSubmit={handleVerifyOtp} className="space-y-4">
-              <p className="text-xs text-slate-400 text-center">We sent a code to {email}</p>
-              <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)} maxLength={6} placeholder="000000" required className="w-full bg-slate-800/50 border border-white/10 rounded-xl py-3 text-center text-2xl tracking-[1em] text-white focus:outline-none focus:border-emerald-500 transition-colors" />
-              <button type="submit" disabled={isLoading} className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] disabled:opacity-70">
-                {isLoading ? "Verifying..." : "Verify Code"}
-              </button>
-              <button type="button" onClick={() => setStep("email")} className="w-full flex items-center justify-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"><ChevronLeft className="w-4 h-4" /> Back to Email</button>
-            </motion.form>
+            </motion.div>
+          )}
+
+          {/* STEP 2: ROLE SELECTION */}
+          {step === 2 && (
+            <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <h2 className="text-2xl font-bold text-white mb-6">How will you use Sahyog?</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  { id: "donor", icon: User, title: "Donor", desc: "I want to donate food or clothes." },
+                  { id: "ngo", icon: Building2, title: "NGO / Shelter", desc: "We need supplies for our community." },
+                  { id: "driver", icon: Truck, title: "Driver", desc: "I want to deliver and earn rewards." },
+                  { id: "vendor", icon: Store, title: "Vendor / Store", desc: "I want to sell or donate surplus stock." }
+                ].map((r) => (
+                  <div key={r.id} onClick={() => setRole(r.id as any)} className={`p-4 rounded-xl border cursor-pointer transition-all ${role === r.id ? "border-rose-500 bg-rose-600/10" : "border-white/10 bg-slate-900/40 hover:border-white/30"}`}>
+                    <r.icon className={`w-8 h-8 mb-3 ${role === r.id ? "text-rose-500" : "text-slate-400"}`} />
+                    <h3 className="text-white font-semibold">{r.title}</h3>
+                    <p className="text-xs text-slate-400 mt-1">{r.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-4 mt-8">
+                <button onClick={() => setStep(1)} className="w-1/3 bg-white/5 hover:bg-white/10 text-white font-medium py-3 rounded-xl transition flex justify-center items-center gap-2"><ArrowLeft className="w-4 h-4" /> Back</button>
+                <button onClick={() => setStep(3)} disabled={!role} className="w-2/3 bg-rose-600 text-white font-bold py-3 rounded-xl hover:bg-rose-500 transition disabled:opacity-50 flex justify-center items-center gap-2">Next Step <ArrowRight className="w-4 h-4" /></button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 3: KYC */}
+          {step === 3 && (
+            <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+              <h2 className="text-2xl font-bold text-white mb-2">KYC Verification</h2>
+              <p className="text-sm text-slate-400 mb-6">To ensure platform safety, we require basic verification for all users.</p>
+              
+              {role === "ngo" && (
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <input type="text" placeholder="Organization Name" value={orgName} onChange={e => setOrgName(e.target.value)} className="bg-slate-900/80 border border-white/10 rounded-xl p-3 text-white focus:border-rose-500 outline-none w-full" />
+                  <input type="number" placeholder="Number of Members" value={memberCount} onChange={e => setMemberCount(e.target.value)} className="bg-slate-900/80 border border-white/10 rounded-xl p-3 text-white focus:border-rose-500 outline-none w-full" />
+                </div>
+              )}
+
+              <div className="bg-slate-900/40 border border-white/5 p-6 rounded-xl flex flex-col items-center justify-center text-center border-dashed border-2">
+                <Upload className="w-10 h-10 text-rose-500 mb-3" />
+                <h3 className="text-white font-medium mb-1">
+                  {role === "ngo" ? "Upload 12A/80G Certificate" : role === "driver" ? "Upload Driving License" : "Upload Govt ID (Aadhaar/PAN)"}
+                </h3>
+                <p className="text-xs text-slate-400 mb-4">PDF, JPG, or PNG formats</p>
+                <label className="cursor-pointer bg-rose-600 text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-rose-500 transition">
+                  Select File
+                  <input type="file" accept=".pdf,image/*" onChange={e => setKycFile(e.target.files?.[0] || null)} className="hidden" />
+                </label>
+                {kycFile && <p className="text-xs text-rose-400 mt-3 font-medium">{kycFile.name} selected</p>}
+              </div>
+
+              <div className="flex gap-4 mt-8">
+                <button onClick={() => setStep(2)} className="w-1/3 bg-white/5 hover:bg-white/10 text-white font-medium py-3 rounded-xl transition flex justify-center items-center gap-2"><ArrowLeft className="w-4 h-4" /> Back</button>
+                <button onClick={handleFinish} disabled={!kycFile || isLoading} className="w-2/3 bg-rose-600 text-white font-bold py-3 rounded-xl hover:bg-rose-500 transition disabled:opacity-50 flex justify-center items-center gap-2">
+                  {isLoading ? "Saving..." : "Complete Setup"} <CheckCircle2 className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
-
-        <div className="mt-8 text-center">
-          <p className="text-sm text-slate-400">
-            {isSignUp ? "Already have an account? " : "Don't have an account? "}
-            <button onClick={() => { setIsSignUp(!isSignUp); setStep("email"); }} className="text-emerald-400 hover:underline">
-              {isSignUp ? "Log in" : "Sign up"}
-            </button>
-          </p>
-          <button className="mt-4 text-xs text-slate-500 hover:text-white transition-colors">Continue as Guest</button>
-        </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

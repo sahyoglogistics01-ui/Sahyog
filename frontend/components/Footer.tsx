@@ -1,19 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Heart } from "lucide-react";
+import { Heart, Shield, FileText, Gift } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="relative bg-slate-950 pt-16 pb-8 overflow-hidden border-t border-white/10">
+    <footer className="relative bg-[#050505] pt-16 pb-8 overflow-hidden border-t border-white/10">
       
       {/* Subtle background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-rose-600/5 blur-[120px] rounded-full pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           
           {/* Left: Brand & Description */}
-          <div className="flex flex-col items-start">
+          <div className="col-span-1 md:col-span-1 flex flex-col items-start">
             <Link href="/">
               <Image 
                 src="/logo-full.png" 
@@ -24,17 +24,31 @@ export default function Footer() {
               />
             </Link>
             <p className="text-slate-400 text-sm max-w-xs leading-relaxed">
-              Bridging the gap between urban surplus and critical need through AI-driven logistics. Logistics for Social Good.
+              Bridging the gap between urban surplus and critical need through AI-driven logistics.
             </p>
           </div>
           
           {/* Center: Platform Links */}
-          <div className="flex flex-col gap-3 md:items-center">
+          <div className="flex flex-col gap-3">
             <h4 className="text-white font-semibold mb-2">Platform</h4>
-            <Link href="/research" className="text-sm text-slate-400 hover:text-emerald-400 transition-colors w-fit">Research & Impact</Link>
-            <Link href="/about" className="text-sm text-slate-400 hover:text-emerald-400 transition-colors w-fit">About Us</Link>
-            <Link href="/trust" className="text-sm text-slate-400 hover:text-emerald-400 transition-colors w-fit">Trust & Safety</Link>
-            <Link href="/login" className="text-sm text-slate-400 hover:text-emerald-400 transition-colors w-fit">Log In</Link>
+            <Link href="/research" className="text-sm text-slate-400 hover:text-rose-500 transition-colors w-fit">Research & Impact</Link>
+            <Link href="/team" className="text-sm text-slate-400 hover:text-rose-500 transition-colors w-fit">About Us</Link>
+            <Link href="/trust" className="text-sm text-slate-400 hover:text-rose-500 transition-colors w-fit">Trust & Safety</Link>
+            <Link href="/login" className="text-sm text-slate-400 hover:text-rose-500 transition-colors w-fit">Log In</Link>
+          </div>
+
+          {/* Center: Legal Links */}
+          <div className="flex flex-col gap-3">
+            <h4 className="text-white font-semibold mb-2">Legal & Rewards</h4>
+            <Link href="/privacy" className="text-sm text-slate-400 hover:text-rose-500 transition-colors w-fit flex items-center gap-2">
+              <Shield className="w-4 h-4" /> Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-sm text-slate-400 hover:text-rose-500 transition-colors w-fit flex items-center gap-2">
+              <FileText className="w-4 h-4" /> Terms of Service
+            </Link>
+            <Link href="/referral" className="text-sm text-slate-400 hover:text-rose-500 transition-colors w-fit flex items-center gap-2">
+              <Gift className="w-4 h-4" /> Refer & Earn
+            </Link>
           </div>
 
           {/* Right: Built by Students */}
@@ -56,14 +70,13 @@ export default function Footer() {
               </div>
             </div>
           </div>
-
         </div>
         
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 border-t border-white/10 pt-8 mt-4">
           <p>© 2026 Sahyog. All rights reserved.</p>
           <p className="flex items-center gap-1 mt-2 md:mt-0">
-            Built with <Heart className="w-3 h-3 text-emerald-500 fill-emerald-500" /> for a better tomorrow.
+            Built with <Heart className="w-3 h-3 text-rose-600 fill-rose-600" /> for a better tomorrow.
           </p>
         </div>
       </div>

@@ -49,8 +49,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* MATCHED: Background Grid & Orbs */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-emerald-500/20 blur-[150px] rounded-full"></div>
-        <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-blue-600/20 blur-[150px] rounded-full"></div>
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-rose-600/20 blur-[150px] rounded-lg"></div>
+        <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-amber-500/20 blur-[150px] rounded-lg"></div>
       </div>
 
       {/* Sidebar (Glassmorphic) */}
@@ -66,12 +66,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* User Profile Section */}
         <div className="flex flex-col items-center px-6 py-6 border-b border-white/10">
           <div className="relative mb-4">
-            <div className="w-20 h-20 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center overflow-hidden p-1">
-              <div className="w-full h-full rounded-full overflow-hidden">
+            <div className="w-20 h-20 rounded-lg bg-rose-600/10 border-2 border-rose-600/30 flex items-center justify-center overflow-hidden p-1">
+              <div className="w-full h-full rounded-lg overflow-hidden">
                 {user?.user_metadata?.avatar_url ? (
                   <img src={user.user_metadata.avatar_url} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
-                  <User className="w-8 h-8 text-emerald-400 m-auto" />
+                  <User className="w-8 h-8 text-rose-500 m-auto" />
                 )}
               </div>
             </div>
@@ -86,9 +86,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {user?.user_metadata?.bio || "No bio yet. Tap the pencil to tell the community about yourself."}
           </p>
           
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10">
-            <Heart className="w-3 h-3 text-emerald-400" />
-            <span className="text-xs font-medium text-emerald-400 capitalize">{role || "Donor"}</span>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-600/20 bg-rose-600/10">
+            <Heart className="w-3 h-3 text-rose-500" />
+            <span className="text-xs font-medium text-rose-500 capitalize">{role || "Donor"}</span>
           </div>
         </div>
 
@@ -97,12 +97,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <Link key={item.name} href={item.href} className={`flex items-center justify-between px-4 py-3 rounded-lg transition-all ${isActive ? "bg-emerald-500/10 text-emerald-400" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
+              <Link key={item.name} href={item.href} className={`flex items-center justify-between px-4 py-3 rounded-lg transition-all ${isActive ? "bg-rose-600/10 text-rose-500" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>
                 <div className="flex items-center gap-3">
                   <item.icon className="w-5 h-5" />
                   <span className="text-sm font-medium">{item.name}</span>
                 </div>
-                {isActive && <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>}
+                {isActive && <div className="w-1.5 h-1.5 rounded-lg bg-rose-600"></div>}
               </Link>
             );
           })}
@@ -126,8 +126,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <span className="font-semibold text-white">Dashboard</span> / Home
           </div>
           <div className="flex items-center gap-4">
-             <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-               <User className="w-4 h-4 text-emerald-400" />
+             <div className="w-8 h-8 rounded-lg bg-rose-600/10 border border-rose-600/20 flex items-center justify-center">
+               <User className="w-4 h-4 text-rose-500" />
              </div>
           </div>
         </header>
